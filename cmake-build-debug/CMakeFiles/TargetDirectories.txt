@@ -1,3 +1,0 @@
-C:/Users/Zmote/CLionProjects/CountdownNumberSearch/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-C:/Users/Zmote/CLionProjects/CountdownNumberSearch/cmake-build-debug/CMakeFiles/CountdownNumberSearch.dir
-C:/Users/Zmote/CLionProjects/CountdownNumberSearch/cmake-build-debug/CMakeFiles/edit_cache.dir
