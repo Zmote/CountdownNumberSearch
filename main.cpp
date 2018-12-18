@@ -8,6 +8,7 @@ using StringVector = std::vector<String>;
 using VectorOfStringVectors = std::vector<StringVector>;
 using IntVector = std::vector<int>;
 using VectorOfIntVectors = std::vector<IntVector>;
+using StringIntPair = std::pair<String, int>;
 
 int add(int first, int second) {
     return first + second;
@@ -27,9 +28,8 @@ int divide(int first, int second) {
     return first / second;
 }
 
-StringVector calculate_permutations(IntVector const &numbers) {
+VectorOfStringVectors calculate_permutations(IntVector const &numbers) {
     StringVector operators{"+", "-", "*", "/"};
-    auto permutations = StringVector{};
     VectorOfStringVectors operands =
             VectorOfStringVectors(numbers.size() - 1, operators);
     VectorOfStringVectors operandPermutations{};
@@ -49,14 +49,15 @@ StringVector calculate_permutations(IntVector const &numbers) {
         }
     }
 
+    VectorOfStringVectors permutations{};
     for (StringVector const &_operands: operandPermutations) {
-        String numPermutation{};
+        StringVector numPermutation{};
         for (int i = 0; i < numbers.size(); i++) {
             if (i == (numbers.size() - 1)) {
-                numPermutation += std::to_string(numbers[i]);
+                numPermutation.emplace_back(std::to_string(numbers[i]));
             } else {
-                numPermutation += std::to_string(numbers[i]);
-                numPermutation += _operands[i];
+                numPermutation.emplace_back(std::to_string(numbers[i]));
+                numPermutation.emplace_back(_operands[i]);
             }
         }
         permutations.emplace_back(numPermutation);
@@ -65,18 +66,18 @@ StringVector calculate_permutations(IntVector const &numbers) {
     return permutations;
 };
 
-void append(StringVector &first, StringVector const &second) {
+void append(VectorOfStringVectors &first, VectorOfStringVectors const &second) {
     std::copy(second.begin(), second.end(), std::back_inserter(first));
 }
 
-void numbersPermutation(IntVector a, int size, int n, VectorOfIntVectors &collected) {
+void numbers_permutation(IntVector a, int size, int n, VectorOfIntVectors &collected) {
     if (size == 1) {
         collected.emplace_back(a);
         return;
     }
 
     for (int i = 0; i < size; i++) {
-        numbersPermutation(a, size - 1, n, collected);
+        numbers_permutation(a, size - 1, n, collected);
         if (size % 2 == 1) {
             std::swap(a[0], a[size - 1]);
         } else {
@@ -86,18 +87,50 @@ void numbersPermutation(IntVector a, int size, int n, VectorOfIntVectors &collec
     }
 }
 
+StringIntPair evaluate_expression(StringVector const &expression) {
+    String operation{};
+    for (String const &val: expression) {
+        operation += val;
+    }
+    int result{std::stoi(expression[0])};
+    for (int i = 1; i < expression.size(); i++) {
+        if (expression[i] == "*") {
+            result = multiply(result, std::stoi(expression[i + 1]));
+        }
+        if (expression[i] == "/") {
+            try {
+                result = divide(result, std::stoi(expression[i + 1]));
+            } catch (std::exception const &ex) {
+                return StringIntPair{operation + ", Failed: " + ex.what(), -1};
+            }
+        }
+        if (expression[i] == "+") {
+            result = add(result, std::stoi(expression[i + 1]));
+        }
+        if (expression[i] == "-") {
+            result = subtract(result, std::stoi(expression[i + 1]));
+        }
+    }
+    return StringIntPair{operation, result};
+}
+
 int main() {
-    int target = 271;
+    int target = 272;
     IntVector initialNumbers{1, 4, 10, 8, 25, 50};
     int size = static_cast<int>(initialNumbers.size());
     VectorOfIntVectors numberPermutations{};
-    numbersPermutation(initialNumbers, size, size, numberPermutations);
-    StringVector permutations{};
+    numbers_permutation(initialNumbers, size, size, numberPermutations);
+    VectorOfStringVectors permutations{};
     for (IntVector const &numbers: numberPermutations) {
         append(permutations, calculate_permutations(numbers));
     }
 
-    for (String const &permutation: permutations) {
-        std::cout << permutation << "\n";
+    for (StringVector const &permutation: permutations) {
+        auto pair = evaluate_expression(permutation);
+        int diff = abs(pair.second - target);
+        if (diff < 8) {
+            std::cout << pair.first << ": " << pair.second << ", Target: "
+                      << target << ", Diff: " << diff << "\n";
+        }
     }
 }
