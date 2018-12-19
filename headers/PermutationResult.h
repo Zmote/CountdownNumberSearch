@@ -11,6 +11,12 @@ namespace zmote::countdown {
         std::string operation;
     public:
         PermutationResult(std::string p_operation, int p_result, int p_target, int p_diff);
+        bool operator==(PermutationResult const & right) const;
+        bool operator!=(PermutationResult const & right) const;
+        bool operator<(PermutationResult const & right) const;
+        bool operator<=(PermutationResult const & right) const;
+        bool operator>(PermutationResult const & right) const;
+        bool operator>=(PermutationResult const & right) const;
     };
 }
 

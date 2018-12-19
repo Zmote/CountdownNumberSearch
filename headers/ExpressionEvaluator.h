@@ -8,7 +8,9 @@ namespace zmote::countdown {
     public:
         ExpressionEvaluator() = default;
 
-        StringIntPair evaluate(StringVector const &expression);
+        StringIntPair evaluate(StringVector const &expression, int target);
+    private:
+        void appendOperands(String &operation, const StringVector &expression, int i) const;
     };
 }
 
