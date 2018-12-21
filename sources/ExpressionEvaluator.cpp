@@ -1,39 +1,43 @@
+#include <algorithm>
+#include <cctype>
 #include "../headers/ExpressionEvaluator.h"
 #include "../headers/SimpleMathOps.h"
 
 namespace zmote::countdown {
-    StringIntPair ExpressionEvaluator::evaluate(StringVector const &expression, int target) {
-        using namespace zmote::countdown;
-        int result{std::stoi(expression[0])};
-        String operation{expression[0]};
-        for (int i = 1; i < expression.size(); i++) {
-            if (result == target) return StringIntPair{operation, result};
-            if (expression[i] == "*") {
-                appendOperands(operation, expression, i);
-                result = SimpleMathOps::multiply(result, std::stoi(expression[i + 1]));
-            }
-            if (expression[i] == "/") {
-                try {
-                    appendOperands(operation, expression, i);
-                    result = SimpleMathOps::divide(result, std::stoi(expression[i + 1]));
-                } catch (std::exception const &ex) {
-                    return StringIntPair{operation + ", Failed: " + ex.what(), -1};
-                }
-            }
-            if (expression[i] == "+") {
-                appendOperands(operation, expression, i);
-                result = SimpleMathOps::add(result, std::stoi(expression[i + 1]));
-            }
-            if (expression[i] == "-") {
-                appendOperands(operation, expression, i);
-                result = SimpleMathOps::subtract(result, std::stoi(expression[i + 1]));
-            }
-        }
-        return StringIntPair{operation, result};
+
+    std::string encase_in_brackets(std::string const &p_input) {
+        return "(" + p_input + ")";
     }
 
-    void ExpressionEvaluator::appendOperands(String &operation, const StringVector &expression, int i) const {
-        operation += expression[i];
-        operation += expression[i+1];
+    bool is_digit(std::string const &p_input) {
+        for (char const &character: p_input) {
+            if (!std::isdigit(character)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    StringIntPair ExpressionEvaluator::evaluate(StringVector const &expression, int target) {
+        int result{-1};
+        int closest{result};
+        std::string closest_expr{};
+        std::string expr{};
+        std::for_each(expression.begin(), expression.end(), [&](std::string const &elem) {
+            expr += elem;
+            if (is_digit(elem)) {
+                expr = encase_in_brackets(expr);
+            }
+            if (parser.Calculate(expr.c_str(), &result) == CMathParser::ResultOk) {
+                int closest_diff{abs(target - closest)};
+                int current_diff{abs(target - result)};
+                if (current_diff < closest_diff) {
+                    closest = result;
+                    closest_expr = expr;
+                    if (current_diff == 0) return;
+                }
+            }
+        });
+        return StringIntPair{closest_expr, closest};
     }
 }

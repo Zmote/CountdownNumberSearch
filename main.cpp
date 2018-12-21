@@ -30,18 +30,8 @@ void start_calculation() {
     int id{0};
     for (PermutationResult const &result: results_generator.get_results()) {
         if (result.diff <= limit) {
-            std::cout << std::to_string(++id)<< ") Operation: ";
-            for (char const &op: result.operation) {
-                if (op == '+' || op == '-' || op == '/' || op == '*') {
-                    std::cout << "\n";
-                    std::cout << op << " ";
-                } else {
-                    std::cout << op;
-                }
-            }
-            std::cout << "\n";
-            std::cout << "Result: " << result.result << ", Target: " << result.target
-                      << ", Diff: " << result.diff << "\n\n";
+            std::cout << std::to_string(++id) << ") Operation: " << result.operation << ", Result: "
+                      << result.result << ", Target: " << result.target << ", Diff: " << result.diff << "\n";
         }
     }
     std::cout << "\n-------------- Results End ---------------------- \n\n";
