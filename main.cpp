@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <chrono>
 #include "headers/ResultsGenerator.h"
 
 void start_calculation() {
@@ -25,7 +26,10 @@ void start_calculation() {
     std::cout << "Please enter a limit( show results with certain difference to target): ";
     std::cin >> limit;
     std::cout << "Calculating results... please be patient... \n";
+    auto start = std::chrono::high_resolution_clock::now();
     ResultsGenerator results_generator{target, initial_numbers};
+    std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - start;
+    std::cout << "Calculation took: " << std::to_string(elapsed.count()) << "s\n";
     std::cout << "\n-------------- Results Start -------------------- \n\n";
     int id{0};
     for (PermutationResult const &result: results_generator.get_results()) {

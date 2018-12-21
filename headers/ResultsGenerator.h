@@ -11,9 +11,9 @@ namespace zmote::countdown {
     using PermutationResultVector = std::vector<PermutationResult>;
 
     class ResultsGenerator {
+        int const PARTITION_SIZE{61400};
         PermutationResultSet results{};
         PermutationCalculator permutation_calculator{};
-        ExpressionEvaluator expression_evaluator{};
 
     public:
         ResultsGenerator(int p_target, IntVector p_initial_numbers);
