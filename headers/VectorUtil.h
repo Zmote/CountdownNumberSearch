@@ -4,7 +4,7 @@
 #include "CountdownAliases.h"
 
 namespace zmote::countdown::util {
-    void append(VectorOfStringVectors &first, VectorOfStringVectors const &second);
+    void append(vector_vectors<string> &first, vector_vectors<string> const &second);
 }
 
 #endif //COUNTDOWNNUMBERSEARCH_VECTORUTIL_H

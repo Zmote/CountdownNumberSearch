@@ -7,6 +7,7 @@
 #include <boost/operators.hpp>
 #include <stdexcept>
 #include "../typetraits/CountdownTraits.h"
+#include "../CountdownAliases.h"
 
 namespace zmote::countdown {
 
@@ -19,15 +20,15 @@ namespace zmote::countdown {
     template<class T>
     class Permutation<T, typename std::enable_if_t<has_operator_plus_equal<T>::value>>
             : boost::less_than_comparable<Permutation<T>> {
-        std::vector<T> _parts;
+        vector<T> _parts;
     public:
-        explicit Permutation(std::vector<T> const &p_content)
+        explicit Permutation(vector<T> const &p_content)
                 : _parts{p_content} {}
 
         Permutation(std::initializer_list<T> p_list)
                 : _parts{p_list} {}
 
-        std::vector<T> get_parts() const {
+        vector<T> get_parts() const {
             return _parts;
         }
 

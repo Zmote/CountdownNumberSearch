@@ -13,7 +13,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//using namespace NSWFL::String;
+//using namespace NSWFL::string;
 
 #ifndef _CVTBUFSIZE
 #define _CVTBUFSIZE (309+40) /* Number of digits in maximum double precision value + slop */

@@ -10,7 +10,7 @@ namespace zmote::countdown {
     public:
         ExpressionEvaluator() = default;
 
-        StringIntPair evaluate(StringVector const &expression, int target);
+        pair<string,int> evaluate(vector<string> const &expression, int target);
     };
 }
 

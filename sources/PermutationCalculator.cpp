@@ -1,27 +1,26 @@
 #include "../headers/PermutationCalculator.h"
-#include "../headers/SimpleMathOps.h"
 #include "../headers/VectorUtil.h"
 
 namespace zmote::countdown {
 
-    PermutationCalculator::PermutationCalculator(IntVector const &p_initial_numbers) {
+    PermutationCalculator::PermutationCalculator(vector<int> const &p_initial_numbers) {
         init(p_initial_numbers);
     }
 
-    void PermutationCalculator::init(IntVector const &p_initial_numbers) {
+    void PermutationCalculator::init(vector<int> const &p_initial_numbers) {
         clear();
         initial_numbers = p_initial_numbers;
         int size{static_cast<int>(initial_numbers.size())};
         calculate_numbers_permutations(initial_numbers, size, size);
         calculate_operator_permutations();
-        for (IntVector const &num_permutations: number_permutations) {
+        for (vector<int> const &num_permutations: number_permutations) {
             calculate_expression_permutations(num_permutations);
         }
     }
 
-    void PermutationCalculator::calculate_expression_permutations(IntVector const &numbers) {
-        for (StringVector const &operands: operand_permutations) {
-            StringVector numPermutation{};
+    void PermutationCalculator::calculate_expression_permutations(vector<int> const &numbers) {
+        for (vector<string> const &operands: operand_permutations) {
+            vector<string> numPermutation{};
             for (int i = 0; i < numbers.size(); i++) {
                 if (i == (numbers.size() - 1)) {
                     numPermutation.emplace_back(std::to_string(numbers[i]));
@@ -35,10 +34,10 @@ namespace zmote::countdown {
     }
 
     void PermutationCalculator::calculate_operator_permutations() {
-        VectorOfStringVectors operands(initial_numbers.size() - 1, operators);
-        IntVector slots(initial_numbers.size() - 1, 0);
+        vector_vectors<string> operands(initial_numbers.size() - 1, operators);
+        vector<int> slots(initial_numbers.size() - 1, 0);
         while (slots[0] < operators.size()) {
-            StringVector permutation{};
+            vector<string> permutation{};
             for (int i = 0; i < slots.size(); i++) {
                 permutation.emplace_back(operands[i][slots[i]]);
             }
@@ -53,7 +52,7 @@ namespace zmote::countdown {
         }
     }
 
-    void PermutationCalculator::calculate_numbers_permutations(IntVector a, int size, int n) {
+    void PermutationCalculator::calculate_numbers_permutations(vector<int> a, int size, int n) {
         if (size == 1) {
             number_permutations.emplace_back(a);
             return;
@@ -69,13 +68,13 @@ namespace zmote::countdown {
         }
     }
 
-    VectorOfStringVectors PermutationCalculator::get_permutations() {
+    vector_vectors<string> PermutationCalculator::get_permutations() {
         return permutations;
     }
 
     void PermutationCalculator::clear() {
-        number_permutations = VectorOfIntVectors{};
-        operand_permutations = VectorOfStringVectors{};
-        permutations = VectorOfStringVectors{};
+        number_permutations = vector_vectors<int>{};
+        operand_permutations = vector_vectors<string>{};
+        permutations = vector_vectors<string>{};
     }
 }

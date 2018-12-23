@@ -8,21 +8,21 @@
 
 namespace zmote::countdown {
     class PermutationCalculator {
-        StringVector const operators{"+", "-", "*", "/"};
-        VectorOfIntVectors number_permutations{};
-        VectorOfStringVectors operand_permutations{};
-        VectorOfStringVectors permutations{};
-        IntVector initial_numbers;
+        vector<string> const operators{"+", "-", "*", "/"};
+        vector_vectors<int> number_permutations{};
+        vector_vectors<string> operand_permutations{};
+        vector_vectors<string> permutations{};
+        vector<int> initial_numbers;
     public:
         PermutationCalculator() = default;
-        explicit PermutationCalculator(IntVector const &p_initial_numbers);
-        void init(IntVector const &p_initial_numbers);
-        VectorOfStringVectors get_permutations();
+        explicit PermutationCalculator(vector<int> const &p_initial_numbers);
+        void init(vector<int> const &p_initial_numbers);
+        vector_vectors<string> get_permutations();
 
     private:
-        void calculate_expression_permutations(IntVector const &numbers);
+        void calculate_expression_permutations(vector<int> const &numbers);
 
-        void calculate_numbers_permutations(IntVector a, int size, int n);
+        void calculate_numbers_permutations(vector<int> a, int size, int n);
 
         void calculate_operator_permutations();
 

@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <cctype>
 #include "../headers/ExpressionEvaluator.h"
-#include "../headers/SimpleMathOps.h"
 
 namespace zmote::countdown {
 
@@ -18,7 +17,7 @@ namespace zmote::countdown {
         return true;
     }
 
-    StringIntPair ExpressionEvaluator::evaluate(StringVector const &expression, int target) {
+    pair<string,int> ExpressionEvaluator::evaluate(vector<string> const &expression, int target) {
         int result{-1};
         int closest{result};
         std::string closest_expr{};
@@ -38,6 +37,6 @@ namespace zmote::countdown {
                 }
             }
         });
-        return StringIntPair{closest_expr, closest};
+        return pair<string,int>{closest_expr, closest};
     }
 }

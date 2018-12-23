@@ -11,8 +11,8 @@ void start_calculation() {
     std::cout << "\nPlease enter 6 numbers from the set of numbers\n"
                  "[100, 75, 50, 25, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],\n"
                  "use spaces to separate (duplicates allowed): ";
-    IntVector const number_set{100, 75, 50, 25, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    IntVector initial_numbers{};
+    vector<int> const number_set{100, 75, 50, 25, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    vector<int> initial_numbers{};
     for (int i = 0; i < 6; i++) {
         int number{};
         std::cin >> number;

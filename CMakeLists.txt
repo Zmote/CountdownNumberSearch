@@ -14,8 +14,6 @@ link_directories(${Boost_LIBRARY_DIR})
 
 add_executable(CountdownNumberSearch
         main.cpp
-        headers/SimpleMathOps.h
-        sources/SimpleMathOps.cpp
         sources/PermutationCalculator.cpp
         headers/PermutationCalculator.h
         sources/types/EvaluationResult.cpp
