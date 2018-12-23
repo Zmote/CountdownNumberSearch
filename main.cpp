@@ -32,7 +32,7 @@ void start_calculation() {
     std::cout << "Calculation took: " << std::to_string(elapsed.count()) << "s\n";
     std::cout << "\n-------------- Results Start -------------------- \n\n";
     int id{0};
-    for (PermutationResult const &result: results_generator.get_results()) {
+    for (EvaluationResult const &result: results_generator.get_results()) {
         if (result.diff <= limit) {
             std::cout << std::to_string(++id) << ") Operation: " << result.operation << ", Result: "
                       << result.result << ", Target: " << result.target << ", Diff: " << result.diff << "\n";
@@ -65,4 +65,5 @@ int main() {
             std::cout << "\n";
         }
     }
+
 }

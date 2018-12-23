@@ -9,8 +9,8 @@
 #include "ExpressionEvaluator.h"
 
 namespace zmote::countdown {
-    using PermutationResultSet = std::set<PermutationResult>;
-    using PermutationResultVector = std::vector<PermutationResult>;
+    using PermutationResultSet = std::set<EvaluationResult>;
+    using PermutationResultVector = std::vector<EvaluationResult>;
 
     class ResultsGenerator {
         int const PARTITION_SIZE{61400};
@@ -28,10 +28,10 @@ namespace zmote::countdown {
         void clear();
 
         void run_evaluation_threads(int p_target, const std::vector<VectorOfStringVectors> &parts,
-                                    std::vector<std::future<std::set<PermutationResult>>> &partial_results,
+                                    std::vector<std::future<std::set<EvaluationResult>>> &partial_results,
                                     std::vector<std::thread> &threads) const;
 
-        void populate_results_from_futures(std::vector<std::future<std::set<PermutationResult>>> &partial_results);
+        void populate_results_from_futures(std::vector<std::future<std::set<EvaluationResult>>> &partial_results);
 
         void join_evaluation_threads(std::vector<std::thread> &threads);
 
@@ -40,7 +40,7 @@ namespace zmote::countdown {
                                             std::vector<VectorOfStringVectors> &parts, int permutations_limit) const;
 
         void run_evaluation(int p_target, const VectorOfStringVectors &sub_perms,
-                            std::set<PermutationResult> &sub_results) const;
+                            std::set<EvaluationResult> &sub_results) const;
     };
 }
 

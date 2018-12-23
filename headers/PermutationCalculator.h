@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "PermutationResult.h"
+#include "types/EvaluationResult.h"
 #include "CountdownAliases.h"
 
 namespace zmote::countdown {
