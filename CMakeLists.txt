@@ -18,15 +18,15 @@ add_executable(CountdownNumberSearch
         headers/PermutationCalculator.h
         sources/types/EvaluationResult.cpp
         headers/types/EvaluationResult.h
-        sources/VectorUtil.cpp
-        headers/VectorUtil.h
+        sources/util/VectorUtil.cpp
+        headers/util/VectorUtil.h
         sources/ExpressionEvaluator.cpp
         headers/ExpressionEvaluator.h
         sources/ResultsGenerator.cpp
         headers/ResultsGenerator.h
         headers/util/CMathParser.h
         sources/util/CMathParser.cpp
-        headers/types/Permutation.h sources/types/PermutationList.cpp headers/types/PermutationList.h headers/typetraits/CountdownTraits.h)
+        headers/types/Permutation.h headers/types/PermutationList.h headers/typetraits/CountdownTraits.h)
 
 # Uncomment if using linked libs of boost
 #TARGET_LINK_LIBRARIES(CountdownNumberSearch LINK_PUBLIC ${Boost_LIBRARIES})

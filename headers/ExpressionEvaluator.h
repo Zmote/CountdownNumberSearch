@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "../headers/util/CMathParser.h"
+#include "types/Permutation.h"
 
 namespace zmote::countdown {
     class ExpressionEvaluator {
@@ -11,7 +12,7 @@ namespace zmote::countdown {
     public:
         ExpressionEvaluator() = default;
 
-        std::pair<std::string, int> evaluate(std::vector<std::string> const &expression, int target);
+        std::pair<std::string, int> evaluate(Permutation<std::string> const &expression, int target);
     };
 }
 

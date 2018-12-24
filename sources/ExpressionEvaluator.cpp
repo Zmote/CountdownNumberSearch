@@ -17,7 +17,7 @@ namespace zmote::countdown {
         return true;
     }
 
-    std::pair<std::string, int> ExpressionEvaluator::evaluate(std::vector<std::string> const &expression, int target) {
+    std::pair<std::string, int> ExpressionEvaluator::evaluate(Permutation<std::string> const &expression, int target) {
         int result{-1};
         int closest{result};
         std::string closest_expr{};

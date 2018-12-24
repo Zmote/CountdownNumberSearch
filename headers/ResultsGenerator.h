@@ -15,9 +15,9 @@ namespace zmote::countdown {
         PermutationCalculator permutation_calculator{};
 
     public:
-        ResultsGenerator(int p_target, std::vector<int> p_initial_numbers);
+        ResultsGenerator(int p_target, Permutation<int> p_initial_numbers);
 
-        void generate_for(int p_target, std::vector<int> p_initial_numbers);
+        void generate_for(int p_target, Permutation<int> p_initial_numbers);
 
         std::vector<EvaluationResult> get_results();
 
@@ -25,20 +25,18 @@ namespace zmote::countdown {
         void clear();
 
         std::vector<std::thread>
-        instantiate_evaluation_threads(int p_target, std::vector<std::vector<std::vector<std::string>>> const &parts,
+        instantiate_evaluation_threads(int p_target, std::vector<PermutationList<std::string>> const &parts,
                                        std::vector<std::future<std::set<EvaluationResult>>> &partial_results) const;
 
         void populate_results_from_futures(std::vector<std::future<std::set<EvaluationResult>>> &partial_results);
 
         void join_evaluation_threads(std::vector<std::thread> &&threads);
 
-        std::vector<std::vector<std::vector<std::string>>>
-        split_permutations_into_ranges(std::vector<std::vector<std::string>>
-                                       const &permutations,
-                                       int const &permutations_limit
-        ) const;
+        std::vector<PermutationList<std::string>>
+        split_permutations_into_ranges(PermutationList<std::string> const &permutations,
+                                       int const &permutations_limit) const;
 
-        void run_evaluation(int p_target, const std::vector<std::vector<std::string>> &sub_perms,
+        void run_evaluation(int p_target, const PermutationList<std::string> &sub_perms,
                             std::set<EvaluationResult> &sub_results) const;
     };
 }

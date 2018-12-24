@@ -4,27 +4,28 @@
 #include <string>
 #include <vector>
 #include "types/EvaluationResult.h"
+#include "types/PermutationList.h"
 
 namespace zmote::countdown {
     class PermutationCalculator {
-        std::vector<std::string> const operators{"+", "-", "*", "/"};
-        std::vector<std::vector<int>> number_permutations{};
-        std::vector<std::vector<std::string>> operand_permutations{};
-        std::vector<std::vector<std::string>> permutations{};
-        std::vector<int> initial_numbers;
+        Permutation<std::string> const operators{"+", "-", "*", "/"};
+        PermutationList<int> number_permutations{};
+        PermutationList<std::string> operand_permutations{};
+        PermutationList<std::string> permutations{};
+        Permutation<int> initial_numbers;
     public:
         PermutationCalculator() = default;
 
-        explicit PermutationCalculator(std::vector<int> const &p_initial_numbers);
+        explicit PermutationCalculator(Permutation<int> const &p_initial_numbers);
 
-        void init(std::vector<int> const &p_initial_numbers);
+        void init(Permutation<int> const &p_initial_numbers);
 
-        std::vector<std::vector<std::string>> get_permutations();
+        PermutationList<std::string> get_permutations();
 
     private:
-        void calculate_expression_permutations(std::vector<int> const &numbers);
+        void calculate_expression_permutations(Permutation<int> const &numbers);
 
-        void calculate_numbers_permutations(std::vector<int> a, int size, int n);
+        void calculate_numbers_permutations(Permutation<int> a, int size, int n);
 
         void calculate_operator_permutations();
 
