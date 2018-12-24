@@ -37,7 +37,7 @@ namespace zmote::countdown {
             parts.emplace_back(p_value);
         }
 
-        T join() {
+        T join() const {
             T joined{};
             for (T const &part : parts) {
                 joined += part;
