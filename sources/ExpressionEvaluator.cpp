@@ -17,6 +17,7 @@ namespace zmote::countdown {
         return true;
     }
 
+    // TODO: Implement all relevant precedence evaluations
     std::pair<std::string, int> ExpressionEvaluator::evaluate(Permutation<std::string> const &expression, int target) {
         int result{-1};
         int closest{result};

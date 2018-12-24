@@ -99,6 +99,6 @@ namespace zmote::countdown {
     }
 
     void ResultsGenerator::clear() {
-        results = std::set<EvaluationResult>{};
+        results.clear();
     }
 }
