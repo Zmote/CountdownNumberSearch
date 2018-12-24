@@ -6,13 +6,13 @@
 namespace zmote::countdown {
     template<class T>
     class PermutationList {
-        vector<Permutation<T>> list_;
-        using iterator = typename vector<Permutation<T>>::iterator;
-        using const_iterator = typename vector<Permutation<T>>::const_iterator;
+        std::vector<Permutation<T>> list_;
+        using iterator = typename std::vector<Permutation<T>>::iterator;
+        using const_iterator = typename std::vector<Permutation<T>>::const_iterator;
     public:
         PermutationList() = default;
 
-        explicit PermutationList(vector<Permutation<T>> const &p_list);
+        explicit PermutationList(std::vector<Permutation<T>> const &p_list);
 
         PermutationList(std::initializer_list<Permutation<T>> list_of_permutations);
 

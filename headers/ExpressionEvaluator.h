@@ -1,7 +1,8 @@
 #ifndef COUNTDOWNNUMBERSEARCH_EXPRESSIONEVALUATOR_H
 #define COUNTDOWNNUMBERSEARCH_EXPRESSIONEVALUATOR_H
 
-#include "CountdownAliases.h"
+#include <string>
+#include <vector>
 #include "../headers/util/CMathParser.h"
 
 namespace zmote::countdown {
@@ -10,7 +11,7 @@ namespace zmote::countdown {
     public:
         ExpressionEvaluator() = default;
 
-        pair<string,int> evaluate(vector<string> const &expression, int target);
+        std::pair<std::string, int> evaluate(std::vector<std::string> const &expression, int target);
     };
 }
 

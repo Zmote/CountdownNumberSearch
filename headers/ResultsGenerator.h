@@ -4,42 +4,41 @@
 #include <set>
 #include <future>
 #include <thread>
-#include "CountdownAliases.h"
 #include "PermutationCalculator.h"
 #include "ExpressionEvaluator.h"
 
 namespace zmote::countdown {
-    using PermutationResultSet = std::set<EvaluationResult>;
-    using PermutationResultVector = std::vector<EvaluationResult>;
 
     class ResultsGenerator {
         int const PARTITION_SIZE{61400};
-        PermutationResultSet results{};
+        std::set<EvaluationResult> results{};
         PermutationCalculator permutation_calculator{};
 
     public:
-        ResultsGenerator(int p_target, vector<int> p_initial_numbers);
+        ResultsGenerator(int p_target, std::vector<int> p_initial_numbers);
 
-        void generate_for(int p_target, vector<int> p_initial_numbers);
+        void generate_for(int p_target, std::vector<int> p_initial_numbers);
 
-        PermutationResultVector get_results();
+        std::vector<EvaluationResult> get_results();
 
     private:
         void clear();
 
-        void run_evaluation_threads(int p_target, const vector<vector_vectors<string>> &parts,
-                                    vector<std::future<std::set<EvaluationResult>>> &partial_results,
-                                    vector<std::thread> &threads) const;
+        std::vector<std::thread>
+        instantiate_evaluation_threads(int p_target, std::vector<std::vector<std::vector<std::string>>> const &parts,
+                                       std::vector<std::future<std::set<EvaluationResult>>> &partial_results) const;
 
-        void populate_results_from_futures(vector<std::future<std::set<EvaluationResult>>> &partial_results);
+        void populate_results_from_futures(std::vector<std::future<std::set<EvaluationResult>>> &partial_results);
 
-        void join_evaluation_threads(vector<std::thread> &threads);
+        void join_evaluation_threads(std::vector<std::thread> &&threads);
 
-        void split_permutations_into_ranges(const vector_vectors<string> &permutations,
-                                            vector_vectors<string> &sub_permutations,
-                                            vector<vector_vectors<string>> &parts, int permutations_limit) const;
+        std::vector<std::vector<std::vector<std::string>>>
+        split_permutations_into_ranges(std::vector<std::vector<std::string>>
+                                       const &permutations,
+                                       int const &permutations_limit
+        ) const;
 
-        void run_evaluation(int p_target, const vector_vectors<string> &sub_perms,
+        void run_evaluation(int p_target, const std::vector<std::vector<std::string>> &sub_perms,
                             std::set<EvaluationResult> &sub_results) const;
     };
 }

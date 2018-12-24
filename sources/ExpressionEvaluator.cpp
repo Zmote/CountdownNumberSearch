@@ -17,7 +17,7 @@ namespace zmote::countdown {
         return true;
     }
 
-    pair<string,int> ExpressionEvaluator::evaluate(vector<string> const &expression, int target) {
+    std::pair<std::string, int> ExpressionEvaluator::evaluate(std::vector<std::string> const &expression, int target) {
         int result{-1};
         int closest{result};
         std::string closest_expr{};
@@ -37,6 +37,6 @@ namespace zmote::countdown {
                 }
             }
         });
-        return pair<string,int>{closest_expr, closest};
+        return std::pair<std::string, int>{closest_expr, closest};
     }
 }

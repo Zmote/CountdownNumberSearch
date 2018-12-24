@@ -10,12 +10,12 @@
 #include "../headers/ResultsGenerator.h"
 
 namespace zmote::countdown {
-    ResultsGenerator::ResultsGenerator(int p_target, vector<int> p_initial_numbers) {
+    ResultsGenerator::ResultsGenerator(int p_target, std::vector<int> p_initial_numbers) {
         generate_for(p_target, std::move(p_initial_numbers));
     }
 
-    PermutationResultVector ResultsGenerator::get_results() {
-        PermutationResultVector sorted_results{results.begin(), results.end()};
+    std::vector<EvaluationResult> ResultsGenerator::get_results() {
+        std::vector<EvaluationResult> sorted_results{results.begin(), results.end()};
         std::sort(sorted_results.begin(), sorted_results.end(),
                   [](EvaluationResult const &first, EvaluationResult const &second) {
                       return first.diff > second.diff;
@@ -23,31 +23,27 @@ namespace zmote::countdown {
         return sorted_results;
     }
 
-    // TODO: Refactor long ass function
-    void ResultsGenerator::generate_for(int p_target, vector<int> p_initial_numbers) {
+    void ResultsGenerator::generate_for(int p_target, std::vector<int> p_initial_numbers) {
         clear();
         permutation_calculator.init(p_initial_numbers);
 
-        vector_vectors<string> const &permutations{permutation_calculator.get_permutations()};
-        vector_vectors<string>  sub_permutations{};
-        vector<vector_vectors<string>> parts{};
+        std::vector<std::vector<std::string>> const &permutations{permutation_calculator.get_permutations()};
+
         int thread_count = static_cast<int>(round(permutations.size() / PARTITION_SIZE));
         int permutations_limit = static_cast<int>(round(permutations.size() / thread_count));
 
-        split_permutations_into_ranges(permutations, sub_permutations, parts, permutations_limit);
-
-        vector<std::future<std::set<EvaluationResult>>> partial_results{};
-        vector<std::thread> threads{};
-
-        run_evaluation_threads(p_target, parts, partial_results, threads);
-        join_evaluation_threads(threads);
+        std::vector<std::vector<std::vector<std::string>>> parts{
+                split_permutations_into_ranges(permutations, permutations_limit)};
+        std::vector<std::future<std::set<EvaluationResult>>> partial_results{};
+        join_evaluation_threads(instantiate_evaluation_threads(p_target, parts, partial_results));
         populate_results_from_futures(partial_results);
     }
 
-    void ResultsGenerator::split_permutations_into_ranges(const vector_vectors<string>  &permutations,
-                                                          vector_vectors<string>  &sub_permutations,
-                                                          vector<vector_vectors<string> > &parts,
-                                                          int permutations_limit) const {
+    std::vector<std::vector<std::vector<std::string>>>
+    ResultsGenerator::split_permutations_into_ranges(std::vector<std::vector<std::string>> const &permutations,
+                                                     int const &permutations_limit) const {
+        std::vector<std::vector<std::vector<std::string>>> parts{};
+        std::vector<std::vector<std::string>> sub_permutations{};
         for (int i = 0; i < permutations.size(); i++) {
             sub_permutations.emplace_back(permutations[i]);
             if (i > 0 && i % permutations_limit == 0) {
@@ -55,9 +51,10 @@ namespace zmote::countdown {
                 sub_permutations.clear();
             }
         }
+        return parts;
     }
 
-    void ResultsGenerator::join_evaluation_threads(vector<std::thread> &threads) {
+    void ResultsGenerator::join_evaluation_threads(std::vector<std::thread> &&threads) {
         for (std::thread &a_thread: threads) {
             a_thread.join();
         }
@@ -72,25 +69,27 @@ namespace zmote::countdown {
         }
     }
 
-    void ResultsGenerator::run_evaluation_threads(int p_target, const vector<vector_vectors<string>> &parts,
-                                                  vector<std::future<std::set<EvaluationResult>>> &partial_results,
-                                                  vector<std::thread> &threads) const {
-        for (vector_vectors<string> const &sub_perms: parts) {
-            using PermutationResultsPromise = std::promise<std::set<EvaluationResult>>;
-            PermutationResultsPromise promise{};
+    std::vector<std::thread>
+    ResultsGenerator::instantiate_evaluation_threads(int p_target,
+                                                     std::vector<std::vector<std::vector<std::string>>> const &parts,
+                                                     std::vector<std::future<std::set<EvaluationResult>>> &partial_results) const {
+        std::vector<std::thread> threads{};
+        for (std::vector<std::vector<std::string>> const &sub_perms: parts) {
+            std::promise<std::set<EvaluationResult>> promise{};
             partial_results.emplace_back(promise.get_future());
-            threads.emplace_back(std::thread{[&](PermutationResultsPromise &&p_promise) {
+            threads.emplace_back(std::thread{[&](std::promise<std::set<EvaluationResult>> &&p_promise) {
                 std::set<EvaluationResult> sub_results{};
                 run_evaluation(p_target, sub_perms, sub_results);
                 p_promise.set_value(sub_results);
-            }, move(promise)});
+            }, std::move(promise)});
         }
+        return threads;
     }
 
-    void ResultsGenerator::run_evaluation(int p_target, const vector_vectors<string> &sub_perms,
+    void ResultsGenerator::run_evaluation(int p_target, const std::vector<std::vector<std::string>> &sub_perms,
                                           std::set<EvaluationResult> &sub_results) const {
         ExpressionEvaluator expression_evaluator{};
-        for (vector<string> const &permutation : sub_perms) {
+        for (std::vector<std::string> const &permutation : sub_perms) {
             auto const pair = expression_evaluator.evaluate(permutation, p_target);
             if (pair.second >= 0) {
                 sub_results.insert(
@@ -100,6 +99,6 @@ namespace zmote::countdown {
     }
 
     void ResultsGenerator::clear() {
-        results = PermutationResultSet{};
+        results = std::set<EvaluationResult>{};
     }
 }

@@ -20,7 +20,6 @@ add_executable(CountdownNumberSearch
         headers/types/EvaluationResult.h
         sources/VectorUtil.cpp
         headers/VectorUtil.h
-        headers/CountdownAliases.h
         sources/ExpressionEvaluator.cpp
         headers/ExpressionEvaluator.h
         sources/ResultsGenerator.cpp
