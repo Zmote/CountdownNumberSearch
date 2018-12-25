@@ -44,6 +44,10 @@ namespace zmote::countdown {
             list.emplace_back(p_entry);
         }
 
+        void add(PermutationList<T> const &p_list){
+            std::copy(p_list.begin(), p_list.end(), std::back_inserter(list));
+        }
+
         void clear() {
             list.clear();
         }

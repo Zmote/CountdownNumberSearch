@@ -19,46 +19,36 @@ namespace zmote::countdown {
         return true;
     }
 
-    int map_num_index_to_iteration_range(int const &index) {
-        if (index % 2 != 0) throw std::invalid_argument{"Param must be even index."};
-        return index / 2;
+    int map_num_index_to_iteration_range(int const &index, int const &range) {
+        if (index % range != 0) return -1;
+        return index / range;
     }
 
-    PermutationList<std::string> calculate_precedences(Permutation<std::string> const &expression) {
+    bool has_paranthesis_index(int const &string_index, int const &round_index,
+                               int const &end_index, int const &range) {
+        int mapped_index{map_num_index_to_iteration_range(string_index, range)};
+        return mapped_index != -1
+               && mapped_index >= round_index
+               && string_index != end_index;
+    }
+
+    void add_paranthesis(bool &paranthesis_open, std::string &original, std::string const &appended) {
+        if (!paranthesis_open) {
+            original += "(";
+            original += appended;
+            paranthesis_open = !paranthesis_open;
+        } else {
+            original += appended;
+            original += ")";
+            paranthesis_open = !paranthesis_open;
+        }
+    }
+
+    PermutationList<std::string> calculate_simple_ltr_precedences(Permutation<std::string> const &expression) {
         PermutationList<std::string> precedences{};
         std::string expr{};
-        int rounds(((expression.size() - 1) / 2) + 1);
-        for (int i = 0; i < rounds; i++) {
-            expr.clear();
-            bool paranthesisOpened{false};
-            for (int j = 0; j < expression.size(); j++) {
-                try {
-                    if (j % 2 == 0) {
-                        if (map_num_index_to_iteration_range(j) >= i) {
-                            if (!paranthesisOpened) {
-                                expr += "(";
-                                expr += expression[j];
-                                paranthesisOpened = !paranthesisOpened;
-                            } else {
-                                expr += expression[j];
-                                expr += ")";
-                                paranthesisOpened = !paranthesisOpened;
-                            }
-
-                        } else {
-                            expr += expression[j];
-                        }
-                    } else {
-                        expr += expression[j];
-                    }
-                    precedences.add(Permutation<std::string>{expr});
-                } catch (std::invalid_argument const &ex) {
-                    return precedences;
-                }
-            }
-        }
-
-        for (int i = 0; i < rounds; i++) {
+        int number_count(((expression.size() - 1) / 2) + 1);
+        for (int i = 0; i < number_count; i++) {
             expr.clear();
             for (int j = 0; j < expression.size(); j++) {
                 expr += expression[j];
@@ -68,7 +58,48 @@ namespace zmote::countdown {
                 precedences.add(Permutation<std::string>{expr});
             }
         }
+        return precedences;
+    }
 
+    PermutationList<std::string> calculate_grouped_precedences(Permutation<std::string> const &expression) {
+        PermutationList<std::string> precedences{};
+        std::string expr{};
+        int number_count(((expression.size() - 1) / 2) + 1);
+        int const expression_last_index = expression.size() - 1;
+        for (int range = 2; range < number_count; range++) {
+            for (int round_index = 0; round_index < number_count; round_index++) {
+                expr.clear();
+                if (round_index + range <= number_count) {
+                    bool paranthesis_open{false};
+                    for (int string_index = 0; string_index < expression.size(); string_index++) {
+                        bool is_digit_value{is_digit(expression[string_index])};
+                        if (is_digit_value) {
+                            if (has_paranthesis_index(string_index, round_index, expression_last_index, range)) {
+                                add_paranthesis(paranthesis_open, expr, expression[string_index]);
+                            } else {
+                                expr += expression[string_index];
+                            }
+                        } else {
+                            expr += expression[string_index];
+                            if (string_index == expression_last_index
+                                && paranthesis_open) {
+                                expr += ")";
+                            }
+                        }
+                        if (is_digit_value && !paranthesis_open) {
+                            precedences.add(Permutation<std::string>{expr});
+                        }
+                    }
+                }
+            }
+        }
+        return precedences;
+    }
+
+    PermutationList<std::string> calculate_precedences(Permutation<std::string> const &expression) {
+        PermutationList<std::string> precedences{};
+        precedences.add(calculate_grouped_precedences(expression));
+        precedences.add(calculate_simple_ltr_precedences(expression));
         return precedences;
     }
 
