@@ -1,4 +1,3 @@
-#include <iostream>
 #include <chrono>
 #include "../headers/PermutationCalculator.h"
 #include "../headers/util/VectorUtil.h"

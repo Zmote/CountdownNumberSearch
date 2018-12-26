@@ -14,14 +14,10 @@ namespace zmote::countdown {
     public:
         PermutationList() = default;
 
-        explicit PermutationList(std::vector<Permutation < T>>
-
-        const &p_list)
+        explicit PermutationList(std::vector<Permutation <T>> const &p_list)
         : list{ p_list } {}
 
-        PermutationList(std::initializer_list<Permutation < T>>
-
-    list_of_permutations)
+        PermutationList(std::initializer_list<Permutation <T>> list_of_permutations)
         : list{ list_of_permutations } {}
 
         PermutationList(size_t n_times, Permutation <T> const &p_value)

@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <cctype>
-#include <iostream>
 #include "../headers/ExpressionEvaluator.h"
 #include "../headers/types/PermutationList.h"
 
