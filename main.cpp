@@ -13,7 +13,7 @@ void start_calculation() {
                  "use spaces to separate (duplicates allowed): ";
     std::vector<int> const number_set{100, 75, 50, 25, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
     Permutation<int> initial_numbers{};
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; ++i) {
         int number{};
         std::cin >> number;
         if (find(number_set.begin(), number_set.end(), number) != number_set.end()) {

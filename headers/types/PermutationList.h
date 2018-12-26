@@ -6,23 +6,26 @@
 namespace zmote::countdown {
     template<class T>
     class PermutationList {
-        std::vector<Permutation<T>> list;
-        using iterator = typename std::vector<Permutation<T>>::iterator;
-        using const_iterator = typename std::vector<Permutation<T>>::const_iterator;
+        std::vector<Permutation < T>> list;
+        using iterator = typename std::vector<Permutation < T>>::
+        iterator;
+        using const_iterator = typename std::vector<Permutation < T>>::
+        const_iterator;
     public:
         PermutationList() = default;
 
-        explicit PermutationList(std::vector<Permutation<T>> const &p_list)
-                : list{p_list} {}
+        explicit PermutationList(std::vector<Permutation < T>>
 
-        PermutationList(std::initializer_list<Permutation<T>> list_of_permutations)
-                : list{list_of_permutations} {
+        const &p_list)
+        : list{ p_list } {}
 
-        }
+        PermutationList(std::initializer_list<Permutation < T>>
 
-        PermutationList(size_t n_times, Permutation<T> const &p_value)
-                : list(n_times, p_value) {
-        }
+    list_of_permutations)
+        : list{ list_of_permutations } {}
+
+        PermutationList(size_t n_times, Permutation <T> const &p_value)
+                : list(n_times, p_value) {}
 
         iterator begin() {
             return list.begin();
@@ -40,11 +43,11 @@ namespace zmote::countdown {
             return list.cend();
         }
 
-        void add(Permutation<T> const &p_entry) {
+        void add(Permutation <T> const &p_entry) {
             list.emplace_back(p_entry);
         }
 
-        void add(PermutationList<T> const &p_list){
+        void add(PermutationList<T> const &p_list) {
             std::copy(p_list.begin(), p_list.end(), std::back_inserter(list));
         }
 
@@ -56,11 +59,11 @@ namespace zmote::countdown {
             return list.size();
         }
 
-        Permutation<T> &operator[](int const &index) {
+        Permutation <T> &operator[](int const &index) {
             return list[index];
         }
 
-        Permutation<T> const &operator[](int const &index) const {
+        Permutation <T> const &operator[](int const &index) const {
             return list[index];
         }
     };

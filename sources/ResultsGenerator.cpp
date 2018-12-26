@@ -2,7 +2,6 @@
 
 #include <utility>
 #include <algorithm>
-#include <iostream>
 #include <math.h>
 #include <thread>
 #include <future>

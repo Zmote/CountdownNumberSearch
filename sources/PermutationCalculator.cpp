@@ -1,3 +1,5 @@
+#include <iostream>
+#include <chrono>
 #include "../headers/PermutationCalculator.h"
 #include "../headers/util/VectorUtil.h"
 
@@ -13,23 +15,26 @@ namespace zmote::countdown {
         int size{static_cast<int>(initial_numbers.size())};
         calculate_numbers_permutations(initial_numbers, size, size);
         calculate_operator_permutations();
+
         for (Permutation<int> const &num_permutations: number_permutations) {
             calculate_expression_permutations(num_permutations);
         }
     }
 
     void PermutationCalculator::calculate_expression_permutations(Permutation<int> const &numbers) {
+        int num_size = numbers.size();
+        int last_index = num_size - 1;
         for (Permutation<std::string> const &operands: operand_permutations) {
-            Permutation<std::string> numPermutation{};
-            for (int i = 0; i < numbers.size(); i++) {
-                if (i == (numbers.size() - 1)) {
-                    numPermutation.add(std::to_string(numbers[i]));
+            Permutation<std::string> num_permutation{};
+            for (int i = 0; i < num_size; ++i) {
+                if (i == last_index) {
+                    num_permutation.add(std::to_string(numbers[i]));
                 } else {
-                    numPermutation.add(std::to_string(numbers[i]));
-                    numPermutation.add(operands[i]);
+                    num_permutation.add(std::to_string(numbers[i]));
+                    num_permutation.add(operands[i]);
                 }
             }
-            permutations.add(numPermutation);
+            permutations.add(num_permutation);
         }
     }
 
@@ -38,15 +43,15 @@ namespace zmote::countdown {
         std::vector<int> slots(initial_numbers.size() - 1, 0);
         while (slots[0] < operators.size()) {
             Permutation<std::string> permutation{};
-            for (int i = 0; i < slots.size(); i++) {
+            for (int i = 0; i < slots.size(); ++i) {
                 permutation.add(operands[i][slots[i]]);
             }
             operand_permutations.add(permutation);
             ++slots[slots.size() - 1];
-            for (int i = static_cast<int>(slots.size() - 1); i > 0; i--) {
+            for (int i = static_cast<int>(slots.size() - 1); i > 0; --i) {
                 if (slots[i] >= operators.size()) {
                     slots[i] = 0;
-                    slots[i - 1]++;
+                    ++slots[i - 1];
                 }
             }
         }
@@ -58,7 +63,7 @@ namespace zmote::countdown {
             return;
         }
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; ++i) {
             calculate_numbers_permutations(a, size - 1, n);
             if (size % 2 == 1) {
                 std::swap(a[0], a[size - 1]);
@@ -75,6 +80,7 @@ namespace zmote::countdown {
     void PermutationCalculator::clear() {
         number_permutations.clear();
         operand_permutations.clear();
+        permutations.clear();
         permutations.clear();
     }
 }
