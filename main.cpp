@@ -29,7 +29,6 @@ void start_calculation() {
     auto start = std::chrono::high_resolution_clock::now();
     ResultsGenerator results_generator{target, initial_numbers};
     std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - start;
-    std::cout << "Calculation took: " << std::to_string(elapsed.count()) << "s\n";
     std::cout << "\n-------------- Results Start -------------------- \n\n";
     int id{0};
     for (EvaluationResult const &result: results_generator.get_results()) {
@@ -39,6 +38,7 @@ void start_calculation() {
         }
     }
     std::cout << "\n-------------- Results End ---------------------- \n\n";
+    std::cout << "Calculation took: " << std::to_string(elapsed.count()) << "s\n\n";
 }
 
 int main() {
